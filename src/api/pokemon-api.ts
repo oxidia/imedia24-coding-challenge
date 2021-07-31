@@ -22,3 +22,13 @@ export async function getPokemonsList(
   });
   return data;
 }
+
+export async function getPokemonById(id: number): Promise<any> {
+  const { data } = await axios.get(`/pokemon/${id}`);
+
+  return data;
+}
+
+export function getPokemonImageUrl(id: number) {
+  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`;
+}
