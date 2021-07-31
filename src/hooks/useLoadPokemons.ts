@@ -29,7 +29,6 @@ export default function useLoadPokemons(props: Props) {
       data: state.data
     });
 
-    console.log(offset);
     pApi
       .getPokemonsList({ limit: limit, offset: newOffset * limit })
       .then(function updateState(data: any) {
