@@ -8,6 +8,8 @@ type Props = {
 
 type State = {
   loading: boolean;
+  count: number;
+  hasNextPage: boolean;
   data: any[];
   error?: any;
 };
@@ -17,7 +19,9 @@ export default function useLoadPokemons(props: Props) {
   const [offset, setOffset] = useState<number>(props.offset ?? -1);
   const [state, setState] = useState<State>({
     loading: false,
-    data: []
+    data: [],
+    count: 0,
+    hasNextPage: true
   });
 
   function loadMore() {
@@ -26,24 +30,32 @@ export default function useLoadPokemons(props: Props) {
 
     setState({
       loading: true,
-      data: state.data
+      data: state.data,
+      count: state.count,
+      hasNextPage: state.data.length < state.count
     });
 
     pApi
       .getPokemonsList({ limit: limit, offset: newOffset * limit })
       .then(function updateState(data: any) {
         setState(function updateData(oldState: State) {
+          const newData = oldState.data.concat(data.results);
+
           return {
             loading: false,
-            data: oldState.data.concat(data.results)
+            count: data.count,
+            data: newData,
+            hasNextPage: newData.length < data.count
           };
         });
       })
       .catch(function setError(error: any) {
         setState({
           loading: false,
+          count: 0,
           data: [],
-          error: error
+          error: error,
+          hasNextPage: false
         });
       });
   }

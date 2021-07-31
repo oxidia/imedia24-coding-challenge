@@ -19,10 +19,12 @@ export default function App() {
   const [selectedItemId, setSelectedItemId] = useState<number>(-1);
   const [selectedPokemon, setSelectedPokemon] = useState<any>(null);
   const [loadingPokemon, setLoadingPokemon] = useState<boolean>(false);
-  const { loading, data, error, loadMore } = useLoadPokemons({ limit: 50 });
+  const { loading, hasNextPage, data, error, loadMore } = useLoadPokemons({
+    limit: 50
+  });
   const [infiniteRef] = useInfiniteScroll({
     loading,
-    hasNextPage: true,
+    hasNextPage: hasNextPage,
     disabled: Boolean(error),
     rootMargin: "0px 0px 100px 0px",
     onLoadMore() {
@@ -73,9 +75,11 @@ export default function App() {
           );
         })}
       </div>
-      <div ref={infiniteRef} className="flex justify-center w-full">
-        <Loader />
-      </div>
+      {hasNextPage && (
+        <div ref={infiniteRef} className="flex justify-center w-full">
+          <Loader />
+        </div>
+      )}
 
       <PokemonModal
         showModal={showModal}
