@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
 import SquareXIcon from "./icons/SquareXIcon";
 
@@ -10,6 +10,16 @@ type Props = {
 
 export default function Modal(props: Props) {
   const { showModal = false, children, onClose } = props;
+
+  useEffect(() => {
+    if (showModal) {
+      window.document.body.classList.add("overflow-y-hidden");
+    }
+
+    return () => {
+      window.document.body.classList.remove("overflow-y-hidden");
+    };
+  }, [showModal]);
 
   function contentClickHandler(e: React.MouseEvent) {
     e.stopPropagation();
