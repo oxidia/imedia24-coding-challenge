@@ -65,7 +65,7 @@ export default function App() {
     <div>
       <h1 className="text-5xl text-center my-20">Pokemons</h1>
       {error && <h2>Something went wrong</h2>}
-      <div className="container mx-auto px-2 md:px-0 pb-2 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">
+      <main className="container mx-auto px-2 md:px-0 pb-2 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">
         {data.map(function createPokemon(item: any) {
           const { url, name } = item;
           const id = getIdFromUrl(url);
@@ -74,7 +74,7 @@ export default function App() {
             <Pokemon key={id} id={id} name={name} onClick={setSelectedItemId} />
           );
         })}
-      </div>
+      </main>
       {hasNextPage && (
         <div ref={infiniteRef} className="flex justify-center w-full">
           <Loader />
