@@ -24,7 +24,7 @@ export async function getPokemonsList(
   const offset = options?.offset ?? 0;
 
   if (options?.keyword) {
-    return getPokemonsByKeyword({ ...options, limit, offset });
+    return await getPokemonsByKeyword({ ...options, limit, offset });
   }
 
   const { data } = await axios.get("/pokemon", {
@@ -33,6 +33,7 @@ export async function getPokemonsList(
       offset: offset
     }
   });
+
   return data;
 }
 
@@ -45,11 +46,17 @@ export async function getPokemonsByKeyword(
       limit: MaxApiElements
     }
   });
-  const res = data.results
-    .filter((pokemon: any) => pokemon.name.includes(options!.keyword))
-    .slice(options!.offset, options!.limit);
+  const res = data.results.filter((pokemon: any) =>
+    pokemon.name.includes(options!.keyword)
+  );
 
-  return { ...data, results: res, count: res.length };
+  const count = res.length;
+
+  return {
+    ...data,
+    count: count,
+    results: res.slice(options!.offset, options!.limit)
+  };
 }
 
 export async function getPokemonById(id: number): Promise<any> {
