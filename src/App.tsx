@@ -19,9 +19,12 @@ export default function App() {
   const [selectedItemId, setSelectedItemId] = useState<number>(-1);
   const [selectedPokemon, setSelectedPokemon] = useState<any>(null);
   const [loadingPokemon, setLoadingPokemon] = useState<boolean>(false);
+  const [keyword, setKeyword] = useState<string>("");
   const { loading, hasNextPage, data, error, loadMore } = useLoadPokemons({
-    limit: 50
+    limit: 50,
+    keyword: keyword
   });
+
   const [infiniteRef] = useInfiniteScroll({
     loading,
     hasNextPage: hasNextPage,
@@ -61,9 +64,21 @@ export default function App() {
     return parseInt(id as string, 10);
   }
 
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    setKeyword(value);
+  }
+
   return (
     <div>
       <h1 className="text-5xl text-center my-20">Pokemons</h1>
+      <input
+        type="text"
+        placeholder="Search..."
+        value={keyword}
+        onChange={handleChange}
+      />
+
       {error && (
         <h2 className="text-center text-5xl text-red-400">
           Something went wrong
