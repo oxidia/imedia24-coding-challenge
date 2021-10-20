@@ -1,9 +1,16 @@
 import axios from "axios";
 
+const pokeImgUrlDreamWorld: string =
+  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world";
+const pokeImgUrlOfficialArtwork: string =
+  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork";
+
+const DreamWorldArtLimit: number = 649; // number of disponible artwork in DreamWorld
+
 type GetPokemonsListParams = {
   limit?: number;
   offset?: number;
-  keyword?: string;
+  keyword: string;
 };
 
 axios.defaults.baseURL = "https://pokeapi.co/api/v2";
@@ -15,7 +22,6 @@ export async function getPokemonsList(
   const limit = options?.limit ?? 10;
   const offset = options?.offset ?? 0;
 
-  console.log("ok => ", options?.keyword);
   if (options?.keyword) {
     return getPokemonsByKeyword({ ...options, limit, offset });
   }
@@ -32,11 +38,17 @@ export async function getPokemonsList(
 export async function getPokemonsByKeyword(
   options: GetPokemonsListParams
 ): Promise<any> {
-  const { data } = await axios.get("/pokemon");
+  const { data } = await axios.get("/pokemon", {
+    params: {
+      limit: 2000
+    }
+  });
 
-  return data
-    .filter((pokemon: any) => pokemon.name.starWith(options!.keyword))
-    .slice(options!.offset, options!.limit);
+  const res = data.results.filter((pokemon: any) =>
+    pokemon.name.startsWith(options!.keyword)
+  );
+
+  return { ...data, results: res, count: res.length };
 }
 
 export async function getPokemonById(id: number): Promise<any> {
@@ -46,5 +58,6 @@ export async function getPokemonById(id: number): Promise<any> {
 }
 
 export function getPokemonImageUrl(id: number) {
-  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`;
+  if (id <= DreamWorldArtLimit) return `${pokeImgUrlDreamWorld}/${id}.svg`;
+  return `${pokeImgUrlOfficialArtwork}/${id}.png`;
 }
