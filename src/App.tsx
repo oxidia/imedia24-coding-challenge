@@ -64,7 +64,12 @@ export default function App() {
   return (
     <div>
       <h1 className="text-5xl text-center my-20">Pokemons</h1>
-      {error && <h2>Something went wrong</h2>}
+      {error && (
+        <h2 className="text-center text-5xl text-red-400">
+          Something went wrong
+        </h2>
+      )}
+
       <main className="container mx-auto px-2 md:px-0 pb-2 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">
         {data.map(function createPokemon(item: any) {
           const { url, name } = item;
