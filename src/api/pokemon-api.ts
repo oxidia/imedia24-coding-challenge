@@ -5,7 +5,8 @@ const pokeImgUrlDreamWorld: string =
 const pokeImgUrlOfficialArtwork: string =
   "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork";
 
-const DreamWorldArtLimit: number = 649; // number of disponible artwork in DreamWorld
+const DreamWorldArtLimit: number = 649; // number of available artwork in DreamWorld
+const MaxApiElements: number = 898; // max count of valid data in pokeApi
 
 type GetPokemonsListParams = {
   limit?: number;
@@ -40,13 +41,13 @@ export async function getPokemonsByKeyword(
 ): Promise<any> {
   const { data } = await axios.get("/pokemon", {
     params: {
-      limit: 2000
+      offset: 0,
+      limit: MaxApiElements
     }
   });
-
-  const res = data.results.filter((pokemon: any) =>
-    pokemon.name.startsWith(options!.keyword)
-  );
+  const res = data.results
+    .filter((pokemon: any) => pokemon.name.includes(options!.keyword))
+    .slice(options!.offset, options!.limit);
 
   return { ...data, results: res, count: res.length };
 }
