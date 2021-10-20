@@ -46,6 +46,9 @@ export async function getPokemonsByKeyword(
       limit: MaxApiElements
     }
   });
+  const offset = options.offset || 0;
+  const limit = options!.limit || 10;
+
   const res = data.results.filter((pokemon: any) =>
     pokemon.name.includes(options!.keyword)
   );
@@ -55,7 +58,7 @@ export async function getPokemonsByKeyword(
   return {
     ...data,
     count: count,
-    results: res.slice(options!.offset, options!.limit)
+    results: res.slice(offset, limit + offset)
   };
 }
 
