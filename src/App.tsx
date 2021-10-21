@@ -19,9 +19,12 @@ export default function App() {
   const [selectedItemId, setSelectedItemId] = useState<number>(-1);
   const [selectedPokemon, setSelectedPokemon] = useState<any>(null);
   const [loadingPokemon, setLoadingPokemon] = useState<boolean>(false);
+  const [keyword, setKeyword] = useState<string>("");
   const { loading, hasNextPage, data, error, loadMore } = useLoadPokemons({
-    limit: 50
+    limit: 50,
+    keyword: keyword
   });
+
   const [infiniteRef] = useInfiniteScroll({
     loading,
     hasNextPage: hasNextPage,
@@ -61,10 +64,30 @@ export default function App() {
     return parseInt(id as string, 10);
   }
 
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    setKeyword(value);
+  }
+
   return (
     <div>
       <h1 className="text-5xl text-center my-20">Pokemons</h1>
-      {error && <h2>Something went wrong</h2>}
+      <div className="container mx-auto my-10 ">
+        <input
+          className="w-1/4 min-w-mid outline-none h-12 text-xl rounded-2xl shadow p-1.5 px-3.5"
+          type="text"
+          placeholder="Search..."
+          value={keyword}
+          onChange={handleChange}
+        />
+      </div>
+
+      {error && (
+        <h2 className="text-center text-5xl text-red-400">
+          Something went wrong
+        </h2>
+      )}
+
       <main className="container mx-auto px-2 md:px-0 pb-2 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">
         {data.map(function createPokemon(item: any) {
           const { url, name } = item;

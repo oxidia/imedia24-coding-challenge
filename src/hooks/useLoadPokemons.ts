@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as pApi from "api/pokemon-api";
 
 type Props = {
   limit?: number;
   offset?: number;
+  keyword: string;
 };
 
 type State = {
@@ -36,7 +37,11 @@ export default function useLoadPokemons(props: Props) {
     });
 
     pApi
-      .getPokemonsList({ limit: limit, offset: newOffset * limit })
+      .getPokemonsList({
+        limit: limit,
+        offset: newOffset * limit,
+        keyword: props.keyword
+      })
       .then(function updateState(data: any) {
         setState(function updateData(oldState: State) {
           const newData = oldState.data.concat(data.results);
@@ -59,6 +64,11 @@ export default function useLoadPokemons(props: Props) {
         });
       });
   }
+
+  useEffect(() => {
+    setState({ loading: false, data: [], count: 0, hasNextPage: true });
+    setOffset(-1);
+  }, [props.keyword]);
 
   return { ...state, loadMore };
 }
