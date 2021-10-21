@@ -72,12 +72,15 @@ export default function App() {
   return (
     <div>
       <h1 className="text-5xl text-center my-20">Pokemons</h1>
-      <input
-        type="text"
-        placeholder="Search..."
-        value={keyword}
-        onChange={handleChange}
-      />
+      <div className="container mx-auto my-10 ">
+        <input
+          className="w-1/4 min-w-mid outline-none h-12 text-xl rounded-2xl shadow p-1.5 px-3.5"
+          type="text"
+          placeholder="Search..."
+          value={keyword}
+          onChange={handleChange}
+        />
+      </div>
 
       {error && (
         <h2 className="text-center text-5xl text-red-400">
