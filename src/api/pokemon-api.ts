@@ -3,7 +3,7 @@ import axios from "axios";
 const pokeImgUrlDreamWorld: string =
   "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world";
 const pokeImgUrlOfficialArtwork: string =
-  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork";
+  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
 const DreamWorldArtLimit: number = 649; // number of available artwork in DreamWorld
 const MaxApiElements: number = 898; // max count of valid data in pokeApi
@@ -69,6 +69,8 @@ export async function getPokemonById(id: number): Promise<any> {
 }
 
 export function getPokemonImageUrl(id: number) {
-  if (id <= DreamWorldArtLimit) return `${pokeImgUrlDreamWorld}/${id}.svg`;
+  if (id <= DreamWorldArtLimit) {
+    return `${pokeImgUrlDreamWorld}/${id}.svg`;
+  }
   return `${pokeImgUrlOfficialArtwork}/${id}.png`;
 }
